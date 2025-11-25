@@ -8,6 +8,5 @@ import com.example.demo.Entity.CategoryEntity;
 
 public interface CategoryRepository extends JpaRepository<CategoryEntity, String>{
 
-    public ArrayList<CategoryEntity> findAll();
-    
+    public ArrayList<CategoryEntity> findAll();  
 } 

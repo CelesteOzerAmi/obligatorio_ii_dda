@@ -1,5 +1,6 @@
 package com.example.demo.Entity;
 
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,8 +13,8 @@ import jakarta.persistence.ManyToOne;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED) // indica que es clase padre - la estrategia será 
                                                 // crear una tabla contenido y una por cada subclase
-                                                
-public class ContentEntity {
+@DiscriminatorColumn(name = "type")                                                
+public abstract class ContentEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;

@@ -1,15 +1,15 @@
 package com.example.demo.Entity;
 
-import java.time.Duration;
-
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
+@DiscriminatorValue("MOVIE")
 public class MovieEntity extends ContentEntity{
     
-    private Duration duration;
+    private int duration;
 
-    public MovieEntity(int id, String name, String description, CategoryEntity category, Duration duration,
+    public MovieEntity(int id, String name, String description, CategoryEntity category, int duration,
         String year, double purchasePrice, double rentPrice, boolean premiumExclusive){
         this.id = id;
         this.name = name;
@@ -34,10 +34,10 @@ public class MovieEntity extends ContentEntity{
         (premiumExclusive ? ", premiumExclusive." : ", not premiumExclusive.");
     }
 
-    public Duration getDuration(){
+    public int getDuration(){
         return this.duration;
     }
-    public void setDuration(Duration duration){
+    public void setDuration(int duration){
         this.duration = duration;
     }
 }
