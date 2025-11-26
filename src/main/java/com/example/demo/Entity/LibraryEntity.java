@@ -75,7 +75,7 @@ public class LibraryEntity {
         this.movies = movies;
     }
 
-    public ArrayList<SeriesEntity> getseries(){
+    public ArrayList<SeriesEntity> getSeries(){
         return this.series;
     }
     public void setSeries(ArrayList<SeriesEntity> series){

@@ -16,8 +16,6 @@ public class CategoryServiceImpl implements CategoryService{
     @Autowired
     public CategoryRepository categoryRepository;
 
-    static ArrayList<CategoryEntity> categoryList = new ArrayList<>();
-
     @Override
     public ResponseEntity<ArrayList<CategoryEntity>> getAll(){
         return ResponseEntity.ok().body(categoryRepository.findAll());
