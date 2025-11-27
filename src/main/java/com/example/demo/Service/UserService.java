@@ -10,9 +10,14 @@ public interface UserService {
     
     public ResponseEntity<ArrayList<UserEntity>> getAll();
 
+    public ResponseEntity<ArrayList<UserEntity>> getPremiumUsers();
+
+    public ResponseEntity<ArrayList<UserEntity>> getStandardUsers();
+    
     public ResponseEntity<?> postUser(UserEntity user);
 
     public ResponseEntity<?> getById(int id);
 
     public ResponseEntity<?> updateUser(int id, UserEntity user);
+
 }

@@ -11,27 +11,64 @@ import org.springframework.stereotype.Service;
 import com.example.demo.Entity.LibraryEntity;
 import com.example.demo.Entity.UserEntity;
 import com.example.demo.Repository.LibraryRepository;
+import com.example.demo.Repository.SubscriptionRepository;
 import com.example.demo.Repository.UserRepository;
 
 @Service
-public class UserServiceImpl implements UserService{
-    
-    @Autowired
-    private UserRepository userRepository;
+public class UserServiceImpl implements UserService {
 
     @Autowired
-    private LibraryRepository libraryRepository;
+    public UserRepository userRepository;
+
+    @Autowired
+    public LibraryRepository libraryRepository;
+
+    @Autowired
+    public SubscriptionRepository subscriptionRepository;
 
     static ArrayList<UserEntity> usersList = new ArrayList<>();
 
     @Override
-    public ResponseEntity<ArrayList<UserEntity>> getAll(){
+    public ResponseEntity<ArrayList<UserEntity>> getAll() {
         return ResponseEntity.ok().body(userRepository.findAll());
     }
 
     @Override
-    public ResponseEntity<?> postUser(UserEntity user){
-        if(user.getName().isEmpty() || user.getEmail().isEmpty()){
+    public ResponseEntity<ArrayList<UserEntity>> getPremiumUsers() {
+        ArrayList<UserEntity> all = userRepository.findAll();
+
+        ArrayList<UserEntity> premiumUsers = new ArrayList<>();
+        for (UserEntity userEntity : all) {
+            if (subscriptionRepository.findAll().stream()
+                    .filter(s -> s.isActive() && s.getUser().equals(userEntity))
+                    .findAny().isPresent()) {
+                premiumUsers.add(userEntity);
+            }
+        }
+       
+        return ResponseEntity.ok().body(premiumUsers);
+    }
+
+    @Override
+    public ResponseEntity<ArrayList<UserEntity>> getStandardUsers() {
+        ArrayList<UserEntity> all = userRepository.findAll();
+
+        ArrayList<UserEntity> standardUsers = new ArrayList<>();
+
+        for (UserEntity userEntity : all) {
+            if (!subscriptionRepository.findAll().stream()
+                    .filter(s -> s.isActive() && s.getUser().equals(userEntity))
+                    .findAny().isPresent()) {
+                standardUsers.add(userEntity);
+            }
+        }
+
+        return ResponseEntity.ok().body(standardUsers);
+    }
+
+    @Override
+    public ResponseEntity<?> postUser(UserEntity user) {
+        if (user.getName().isEmpty() || user.getEmail().isEmpty()) {
             return ResponseEntity.badRequest().body("sin datos suficientes");
         }
         userRepository.save(user);
@@ -42,10 +79,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public ResponseEntity<?> getById(int id){
+    public ResponseEntity<?> getById(int id) {
         Optional<UserEntity> user = userRepository.findById(id);
 
-        if(user.isPresent()){
+        if (user.isPresent()) {
             return new ResponseEntity<>(user.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -53,15 +90,15 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public ResponseEntity<?> updateUser(int id, UserEntity userEntity){
+    public ResponseEntity<?> updateUser(int id, UserEntity userEntity) {
 
         Optional<UserEntity> userRepos = userRepository.findById(id);
-        
-        if(!userRepos.isPresent()){
+
+        if (!userRepos.isPresent()) {
             return new ResponseEntity<>("usuario no existe", HttpStatus.NOT_FOUND);
         }
-        
-        if(userEntity.getName().isEmpty() || userEntity.getEmail().isEmpty()){
+
+        if (userEntity.getName().isEmpty() || userEntity.getEmail().isEmpty()) {
             return new ResponseEntity<>("faltan datos obligatorios", HttpStatus.BAD_REQUEST);
         }
 

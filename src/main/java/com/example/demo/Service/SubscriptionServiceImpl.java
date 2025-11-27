@@ -61,8 +61,8 @@ public class SubscriptionServiceImpl implements SubscriptionService{
         if(subscriptionRepo == null){
             return new ResponseEntity<>("Suscripción no encontrada", HttpStatus.NOT_FOUND);
         }
-        
-        subscriptionRepository.delete(subscriptionRepo);
+        subscriptionRepo.setActive(false);
+        subscriptionRepository.save(subscriptionRepo);
         return new ResponseEntity<>("Suscripción cancelada con éxito", HttpStatus.OK);
     }
 }
