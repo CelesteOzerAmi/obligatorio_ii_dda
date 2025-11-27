@@ -19,13 +19,15 @@ public class SubscriptionEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
     private LocalDate activationDate;
-    private double premiumDiscount = 0.20;
+    private double premiumDiscount = 0.80;
+    private boolean active;
 
-    public SubscriptionEntity(int id, UserEntity user, LocalDate activationDate, double premiumDiscount){
+    public SubscriptionEntity(int id, UserEntity user, LocalDate activationDate, double premiumDiscount, boolean active){
         this.id = id;
         this.user = user;
         this.activationDate = activationDate;
         this.premiumDiscount = premiumDiscount;
+        this.active = active;
     }
 
     public SubscriptionEntity(){}
@@ -62,5 +64,12 @@ public class SubscriptionEntity {
     }
     public void setPremiumDiscount(double premiumDiscount){
         this.premiumDiscount = premiumDiscount;
+    }
+
+    public boolean isActive(){
+        return this.active;
+    }
+    public void setActive(boolean active){
+        this.active = active;
     }
 }

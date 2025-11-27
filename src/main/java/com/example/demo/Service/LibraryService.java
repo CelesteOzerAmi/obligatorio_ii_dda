@@ -5,4 +5,6 @@ import org.springframework.http.ResponseEntity;
 public interface LibraryService {
     
     public ResponseEntity<?> getLibrary(int userId);
+
+    public ResponseEntity<?> addContent(int userId, int contentId);
 }

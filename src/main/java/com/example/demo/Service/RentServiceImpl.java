@@ -16,6 +16,9 @@ public class RentServiceImpl implements RentService{
     @Autowired
     public RentRepository rentRepository;
 
+    @Autowired
+    public LibraryService libraryService;
+
     @Override
     public ResponseEntity<ArrayList<RentEntity>> getAll(){
         return ResponseEntity.ok().body(rentRepository.findAll());
@@ -23,6 +26,8 @@ public class RentServiceImpl implements RentService{
 
     @Override
     public ResponseEntity<?> postRent(RentEntity rent){
-        return new ResponseEntity<>(rentRepository.save(rent), HttpStatus.CREATED);
+        rentRepository.save(rent);
+        libraryService.addContent(rent.getUser().getId(), rent.getContent().getId());
+        return new ResponseEntity<>(rent, HttpStatus.CREATED);
     }
 }

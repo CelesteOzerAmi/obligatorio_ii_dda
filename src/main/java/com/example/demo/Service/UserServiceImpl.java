@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.Entity.LibraryEntity;
 import com.example.demo.Entity.UserEntity;
+import com.example.demo.Repository.LibraryRepository;
 import com.example.demo.Repository.UserRepository;
 
 @Service
@@ -16,6 +18,9 @@ public class UserServiceImpl implements UserService{
     
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private LibraryRepository libraryRepository;
 
     static ArrayList<UserEntity> usersList = new ArrayList<>();
 
@@ -29,7 +34,11 @@ public class UserServiceImpl implements UserService{
         if(user.getName().isEmpty() || user.getEmail().isEmpty()){
             return ResponseEntity.badRequest().body("sin datos suficientes");
         }
-        return new ResponseEntity<>(userRepository.save(user), HttpStatus.CREATED);
+        userRepository.save(user);
+        LibraryEntity library = new LibraryEntity();
+        library.setUser(user);
+        libraryRepository.save(library);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @Override
