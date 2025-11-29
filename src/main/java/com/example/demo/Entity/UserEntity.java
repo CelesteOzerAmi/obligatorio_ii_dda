@@ -24,6 +24,13 @@ public class UserEntity {
         this.signInDate = signInDate;
     }
 
+    public UserEntity(int id, String name, String email){
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.signInDate = LocalDate.now();
+    }
+
     public UserEntity(){}
 
     @Override
