@@ -11,12 +11,12 @@ import com.example.demo.Entity.UserEntity;
 import com.example.demo.Service.UserService;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -52,8 +52,13 @@ public class UserController {
         return userService.postUser(user);
     }
     
-    @PutMapping("updateUser/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable int id, @RequestBody UserEntity user){
-        return userService.updateUser(id, user);
+    @PutMapping("updateUser")
+    public ResponseEntity<?> updateUser(@RequestBody UserEntity user){
+        return userService.updateUser(user);
+    }
+
+    @DeleteMapping("deleteUser/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable int id){
+        return userService.deleteUser(id);
     }
 }

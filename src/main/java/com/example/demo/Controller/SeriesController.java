@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.Entity.SeriesEntity;
 import com.example.demo.Service.ContentService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -31,5 +31,10 @@ public class SeriesController {
     @PostMapping("postSeries")
     public ResponseEntity<?> postSeries(@RequestBody SeriesEntity series) {        
         return contentService.postSeries(series);
+    }
+
+    @PutMapping("editSeries")
+    public ResponseEntity<?> editSeries(@RequestBody SeriesEntity series){
+        return contentService.editSeries(series);
     }
 }

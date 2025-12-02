@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
                 premiumUsers.add(userEntity);
             }
         }
-       
+
         return ResponseEntity.ok().body(premiumUsers);
     }
 
@@ -90,22 +90,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> updateUser(int id, UserEntity userEntity) {
+    public ResponseEntity<?> updateUser(UserEntity userEntity) {
 
-        Optional<UserEntity> userRepos = userRepository.findById(id);
+        Optional<UserEntity> userRepos = userRepository.findById(userEntity.getId());
 
         if (!userRepos.isPresent()) {
             return new ResponseEntity<>("usuario no existe", HttpStatus.NOT_FOUND);
         }
 
-        if (userEntity.getName().isEmpty() || userEntity.getEmail().isEmpty()) {
+        if (userEntity.getName().isEmpty() || userEntity.getEmail().isEmpty()
+                || userEntity.getSignInDate().equals(null)) {
             return new ResponseEntity<>("faltan datos obligatorios", HttpStatus.BAD_REQUEST);
         }
 
         UserEntity userFound = userRepos.get();
         userFound.setName(userEntity.getName());
         userFound.setEmail(userEntity.getEmail());
+        userFound.setSignInDate(userEntity.getSignInDate());
 
         return new ResponseEntity<>(userRepository.save(userFound), HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<?> deleteUser(int id) {
+        Optional<UserEntity> userRepos = userRepository.findById(id);
+
+        if (!userRepos.isPresent()) {
+            return new ResponseEntity<>("usuario no existe", HttpStatus.NOT_FOUND);
+        }
+        userRepository.delete(userRepos.get());
+        return new ResponseEntity<>("Usuario eliminado", HttpStatus.OK);
+    }
+
 }

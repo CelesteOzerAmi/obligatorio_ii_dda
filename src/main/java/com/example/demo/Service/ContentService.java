@@ -21,4 +21,10 @@ public interface ContentService {
     public ResponseEntity<ArrayList<SeriesEntity>> getAllSeries();
 
     public ResponseEntity<?> postSeries(SeriesEntity series);
+
+    public ResponseEntity<?> deleteContent(int id);
+
+    public ResponseEntity<?> editMovie(MovieEntity movie);
+
+    public ResponseEntity<?> editSeries(SeriesEntity series);
 }

@@ -67,7 +67,7 @@ public class ContentServiceImpl implements ContentService {
         if(categoryService.getById(movie.getCategory().getName()) == null){
             return new ResponseEntity<>("Categoría no existe.", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(contentRepository.save(movie), HttpStatus.OK);
+        return new ResponseEntity<>(contentRepository.save(movie), HttpStatus.CREATED);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ContentServiceImpl implements ContentService {
         if(categoryService.getById(series.getCategory().getName()) == null){
             return new ResponseEntity<>("Categoría no existe.", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(contentRepository.save(series), HttpStatus.OK);
+        return new ResponseEntity<>(contentRepository.save(series), HttpStatus.CREATED);
     }
 
     @Override
@@ -98,5 +98,45 @@ public class ContentServiceImpl implements ContentService {
         }
         return new ResponseEntity<>(contentRepo, HttpStatus.OK);
     }
+    
+    @Override
+    public ResponseEntity<?> deleteContent(int id){
+        ContentEntity contentRepo = contentRepository.findById(id).orElse(null);
 
+        if (contentRepo == null) {
+            return new ResponseEntity<>("No existe contenido con ese id.", HttpStatus.NOT_FOUND);
+        }
+        contentRepository.delete(contentRepo);
+        return new ResponseEntity<>("Contenido eliminado", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> editMovie(MovieEntity movie){
+        ContentEntity movieRepo = contentRepository.findById(movie.getId()).orElse(null);
+        if(movieRepo != null){
+            movieRepo.setDescription(movie.getDescription());
+            movieRepo.setYear(movie.getYear());
+            movieRepo.setCategory(movie.getCategory());
+            movieRepo.setRentPrice(movie.getRentPrice());
+            movieRepo.setPurchasePrice(movie.getPurchasePrice());
+            movieRepo.setPremiumExclusive(movie.isPremiumExclusive());
+            return new ResponseEntity<>(contentRepository.save(movie), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No se encontró película con ese id", HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<?> editSeries(SeriesEntity series){
+        ContentEntity seriesRepo = contentRepository.findById(series.getId()).orElse(null);
+        if(seriesRepo != null){
+            seriesRepo.setDescription(series.getDescription());
+            seriesRepo.setYear(series.getYear());
+            seriesRepo.setCategory(series.getCategory());
+            seriesRepo.setRentPrice(series.getRentPrice());
+            seriesRepo.setPurchasePrice(series.getPurchasePrice());
+            seriesRepo.setPremiumExclusive(series.isPremiumExclusive());
+            return new ResponseEntity<>(contentRepository.save(series), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No se encontró serie con ese id", HttpStatus.NOT_FOUND);
+    }
 }

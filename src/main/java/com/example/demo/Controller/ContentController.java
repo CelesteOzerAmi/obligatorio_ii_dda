@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Entity.ContentEntity;
 import com.example.demo.Service.ContentService;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -29,5 +31,10 @@ public class ContentController {
     @GetMapping("getById/{id}")
     public ResponseEntity<?> getById(@PathVariable int id) {
         return contentService.getById(id);
+    }
+
+    @DeleteMapping("deleteContent/{id}")
+    public ResponseEntity<?> deleteContent(@PathVariable int id){
+        return contentService.deleteContent(id);
     }
 }

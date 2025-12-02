@@ -7,9 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.Entity.ContentEntity;
 import com.example.demo.Entity.PurchaseEntity;
-import com.example.demo.Entity.UserEntity;
 import com.example.demo.Repository.ContentRepository;
 import com.example.demo.Repository.PurchaseRepository;
 import com.example.demo.Repository.UserRepository;

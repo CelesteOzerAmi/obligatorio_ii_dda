@@ -18,6 +18,7 @@ public interface UserService {
 
     public ResponseEntity<?> getById(int id);
 
-    public ResponseEntity<?> updateUser(int id, UserEntity user);
+    public ResponseEntity<?> updateUser(UserEntity user);
 
+    public ResponseEntity<?> deleteUser(int id);
 }
