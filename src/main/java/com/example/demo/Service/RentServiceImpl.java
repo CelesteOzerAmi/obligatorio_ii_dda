@@ -15,14 +15,16 @@ import com.example.demo.Repository.ContentRepository;
 import com.example.demo.Repository.RentRepository;
 import com.example.demo.Repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
-public class RentServiceImpl implements RentService{
-    
+public class RentServiceImpl implements RentService {
+
     @Autowired
     private RentRepository rentRepository;
 
     @Autowired
-    public LibraryService libraryService;
+    private LibraryService libraryService;
 
     @Autowired
     private UserRepository userRepository;
@@ -31,23 +33,30 @@ public class RentServiceImpl implements RentService{
     private ContentRepository contentRepository;
 
     @Override
-    public ResponseEntity<ArrayList<RentEntity>> getAll(){
+    public ResponseEntity<ArrayList<RentEntity>> getAll() {
         return ResponseEntity.ok().body(rentRepository.findAll());
     }
 
-   @Override
-    public ResponseEntity<?> postRent(int contentId, int userId){
+    @Transactional
+    @Override
+    public ResponseEntity<?> postRent(int contentId, int userId) {
         ContentEntity contentRepo = contentRepository.findById(contentId).orElse(null);
+
         UserEntity userRepo = userRepository.findById(userId).orElse(null);
-        if(contentRepo == null || userRepo == null){
+        if (contentRepo == null || userRepo == null) {
             return new ResponseEntity<>("No fue posible concretar la operación.", HttpStatus.BAD_REQUEST);
         }
+
         RentEntity rent = new RentEntity();
         rent.setContent(contentRepo);
         rent.setUser(userRepo);
         rent.setRentDate(LocalDate.now());
         rent.setExpirationDate(LocalDate.now().plusDays(30));
         rent.setFinalPrice(contentRepo.getRentPrice());
-        return new ResponseEntity<>(rentRepository.save(rent), HttpStatus.ACCEPTED);
+        rentRepository.save(rent);
+        if (libraryService.addContent(userId, contentId)) {
+            return new ResponseEntity<>(rent, HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>("Hubo un error al agregar contenido", HttpStatus.BAD_REQUEST);
     }
 }

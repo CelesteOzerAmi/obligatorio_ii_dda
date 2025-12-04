@@ -6,5 +6,5 @@ public interface LibraryService {
     
     public ResponseEntity<?> getLibrary(int userId);
 
-    public ResponseEntity<?> addContent(int userId, int contentId);
+    public boolean addContent(int userId, int contentId);
 }
