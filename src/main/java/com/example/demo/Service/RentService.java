@@ -10,5 +10,5 @@ public interface RentService {
     
     public ResponseEntity<ArrayList<RentEntity>> getAll();
 
-    public ResponseEntity<?> postRent(RentEntity rent);
+    public ResponseEntity<?> postRent(int contentId, int userId);
 }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.DTO.PurchaseRequest;
 import com.example.demo.Entity.ContentEntity;
 import com.example.demo.Entity.PurchaseEntity;
 import com.example.demo.Entity.UserEntity;
@@ -17,7 +18,10 @@ import com.example.demo.Repository.ContentRepository;
 import com.example.demo.Repository.UserRepository;
 import com.example.demo.Service.PurchaseService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -41,28 +45,8 @@ public class PurchaseController {
         return purchaseService.getAll();
     }
 
-    @PostMapping("postPurchase")
-    public ResponseEntity<?> postPurchase(@RequestBody Map<String, Object> body) {
-        
-        int userId = (int) body.get("user");
-        int contentId = (int) body.get("content");
-        String date = body.get("purchaseDate").toString();
-        LocalDate purchaseDate = LocalDate.parse(date);
-        double finalPrice = Double.parseDouble(body.get("finalPrice").toString());
-
-        UserEntity userRepo = userRepository.findById(userId).orElse(null);
-        ContentEntity contentRepo = contentRepository.findById(contentId).orElse(null);
-
-        if(userRepo == null || contentRepo == null){
-            return new ResponseEntity<>("Usuario o contenido no existe", HttpStatus.BAD_REQUEST);
-        }
-
-        PurchaseEntity purchase = new PurchaseEntity();
-        purchase.setUser(userRepo);
-        purchase.setContent(contentRepo);
-        purchase.setPurchaseDate(purchaseDate);
-        purchase.setFinalPrice(finalPrice);
-
-        return purchaseService.postPurchase(purchase);
+    @PostMapping("buyContent/{contentId}")
+    public ResponseEntity<?> postPurchase(@PathVariable int contentId, @Valid @RequestBody PurchaseRequest purchaseReq) {
+        return purchaseService.postPurchase(contentId, purchaseReq.userId());
     }
 }

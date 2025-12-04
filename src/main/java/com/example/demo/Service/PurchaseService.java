@@ -10,5 +10,5 @@ public interface PurchaseService {
     
     public ResponseEntity<ArrayList<PurchaseEntity>> getAll();
 
-    public ResponseEntity<?> postPurchase(PurchaseEntity purchase);
+    public ResponseEntity<?> postPurchase(int contentId, int userId);
 }

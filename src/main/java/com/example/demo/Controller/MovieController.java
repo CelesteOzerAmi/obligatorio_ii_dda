@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.Entity.ContentEntity;
 import com.example.demo.Entity.MovieEntity;
 import com.example.demo.Service.ContentService;
 import org.springframework.web.bind.annotation.GetMapping;
