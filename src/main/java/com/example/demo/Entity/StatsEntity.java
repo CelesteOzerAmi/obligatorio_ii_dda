@@ -11,7 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class PlayEntity {
+public class StatsEntity {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -27,9 +27,9 @@ public class PlayEntity {
     private Duration duration;
     private int rate;
 
-    public PlayEntity(){}
+    public StatsEntity(){}
 
-    public PlayEntity(int id, UserEntity user, ContentEntity content, LocalDateTime date, Duration duration, int rate){
+    public StatsEntity(int id, UserEntity user, ContentEntity content, LocalDateTime date, Duration duration, int rate){
         this.id = id;
         this.user = user;
         this.content = content;

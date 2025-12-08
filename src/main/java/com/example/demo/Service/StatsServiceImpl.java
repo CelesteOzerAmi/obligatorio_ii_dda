@@ -11,17 +11,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Entity.ContentEntity;
-import com.example.demo.Entity.PlayEntity;
+import com.example.demo.Entity.StatsEntity;
 import com.example.demo.Entity.UserEntity;
 import com.example.demo.Repository.ContentRepository;
-import com.example.demo.Repository.PlayRepository;
+import com.example.demo.Repository.StatsRepository;
 import com.example.demo.Repository.UserRepository;
 
 @Service
-public class PlayServiceImpl implements PlayService {
+public class StatsServiceImpl implements StatsService {
 
     @Autowired
-    private PlayRepository playRepository;
+    private StatsRepository statsRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -30,17 +30,17 @@ public class PlayServiceImpl implements PlayService {
     private ContentRepository contentRepository;
 
     @Override
-    public ResponseEntity<ArrayList<PlayEntity>> getAll() {
-        return new ResponseEntity<>(playRepository.findAll(), HttpStatus.OK);
+    public ResponseEntity<ArrayList<StatsEntity>> getAll() {
+        return new ResponseEntity<>(statsRepository.findAll(), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<ArrayList<PlayEntity>> getAllByUserId(int userId) {
-        return new ResponseEntity<>(playRepository.findAllByUserId(userId), HttpStatus.OK);
+    public ResponseEntity<ArrayList<StatsEntity>> getAllByUserId(int userId) {
+        return new ResponseEntity<>(statsRepository.findAllByUserId(userId), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<?> registerPlay(Map<String, Object> body) {
+    public ResponseEntity<?> registerPlayback(Map<String, Object> body) {
         int userId = (int) body.get("userId");
         UserEntity userRepo = userRepository.findById(userId).orElse(null);
         
@@ -51,6 +51,7 @@ public class PlayServiceImpl implements PlayService {
             return new ResponseEntity<>("Error al registrar reproducción", HttpStatus.BAD_REQUEST);
         }
         try {
+            
             LocalDateTime date = LocalDateTime.parse(body.get("date").toString());
     
             String durationToParse = body.get("duration").toString();
@@ -58,13 +59,13 @@ public class PlayServiceImpl implements PlayService {
     
             int rate = (int) body.get("rate");
     
-            PlayEntity play = new PlayEntity();
-            play.setUser(userRepo);
-            play.setContent(contentRepo);
-            play.setDate(date);
-            play.setDuration(duration);
-            play.setRate(rate);
-            return new ResponseEntity<>(playRepository.save(play), HttpStatus.ACCEPTED);
+            StatsEntity playback = new StatsEntity();
+            playback.setUser(userRepo);
+            playback.setContent(contentRepo);
+            playback.setDate(date);
+            playback.setDuration(duration);
+            playback.setRate(rate);
+            return new ResponseEntity<>(statsRepository.save(playback), HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

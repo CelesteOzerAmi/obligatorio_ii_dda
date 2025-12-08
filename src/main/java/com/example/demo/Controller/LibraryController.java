@@ -9,11 +9,10 @@ import com.example.demo.Service.LibraryService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
 @RestController
 @RequestMapping("streaming/library")
 public class LibraryController {
-    
+
     @Autowired
     public LibraryService libraryService;
 
@@ -21,5 +20,10 @@ public class LibraryController {
     public ResponseEntity<?> getLibrary(@PathVariable int userId) {
         return libraryService.getLibrary(userId);
     }
-        
+
+    @GetMapping("getLibrary/{userId}/{contentId}")
+    public ResponseEntity<?> getContentOnLibrary(@PathVariable int userId, @PathVariable int contentId) {
+        return libraryService.getContentOnLibrary(userId, contentId);
+    }
+
 }

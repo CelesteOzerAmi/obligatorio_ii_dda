@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.Entity.PlayEntity;
-import com.example.demo.Service.PlayService;
+import com.example.demo.Entity.StatsEntity;
+import com.example.demo.Service.StatsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,24 +19,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("streaming/stats")
-public class PlayController {
+public class StatsController {
     
     @Autowired
-    private PlayService playService;
+    private StatsService statsService;
 
     @GetMapping("getAll")
-    public ResponseEntity<ArrayList<PlayEntity>> getAll() {
-        return playService.getAll();
+    public ResponseEntity<ArrayList<StatsEntity>> getAll() {
+        return statsService.getAll();
     }
 
     @GetMapping("getAll/{userId}")
-    public ResponseEntity<ArrayList<PlayEntity>> getAllByUserId (@PathVariable int userId) {
-        return playService.getAllByUserId(userId);
+    public ResponseEntity<ArrayList<StatsEntity>> getAllByUserId (@PathVariable int userId) {
+        return statsService.getAllByUserId(userId);
     }
     
     @PostMapping("registerPlay")
-    public ResponseEntity<?> registerPlay(@RequestBody Map<String, Object> body) {
-        return playService.registerPlay(body);
+    public ResponseEntity<?> registerPlayback(@RequestBody Map<String, Object> body) {
+        return statsService.registerPlayback(body);
     }
     
     

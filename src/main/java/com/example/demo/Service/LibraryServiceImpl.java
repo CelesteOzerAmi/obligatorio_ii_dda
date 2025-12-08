@@ -83,4 +83,28 @@ public class LibraryServiceImpl implements LibraryService {
         new ResponseEntity<>(libraryRepository.save(library), HttpStatus.ACCEPTED);
         return true;
     }
+
+    @Override
+    public ResponseEntity<?> getContentOnLibrary(int userId, int contentId) {
+
+        LibraryEntity libraryRepo = libraryRepository.findByUserId(userId);
+        if (libraryRepo != null) {
+            MovieEntity movie = libraryRepo.getMovies().stream()
+                    .filter(m -> m.getId() == contentId)
+                    .findFirst()
+                    .orElse(null);
+            if (movie != null) {
+                return new ResponseEntity<>(movie, HttpStatus.OK);
+            }
+
+            SeriesEntity series = libraryRepo.getSeries().stream()
+                    .filter(s -> s.getId() == contentId)
+                    .findFirst()
+                    .orElse(null);
+            if (series != null) {
+                return new ResponseEntity<>(series, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>("Contenido no encontrado", HttpStatus.OK);
+    }
 }
