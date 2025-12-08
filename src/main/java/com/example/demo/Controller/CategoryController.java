@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("category")
+@RequestMapping("streaming/category")
 public class CategoryController {
     
     @Autowired

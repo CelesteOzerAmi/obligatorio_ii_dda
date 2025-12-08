@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
-@RequestMapping("content")
+@RequestMapping("streaming/content")
 public class ContentController {
     
     @Autowired

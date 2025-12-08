@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("buy")
+@RequestMapping("streaming/buy")
 public class PurchaseController {
     
     @Autowired

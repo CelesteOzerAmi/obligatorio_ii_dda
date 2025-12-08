@@ -15,7 +15,7 @@ import com.example.demo.Entity.SubscriptionEntity;
 import com.example.demo.Service.SubscriptionService;
 
 @RestController
-@RequestMapping("premium")
+@RequestMapping("streaming/premium")
 public class SubscriptionController {
     
     @Autowired

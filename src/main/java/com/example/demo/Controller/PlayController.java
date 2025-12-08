@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("stats")
+@RequestMapping("streaming/stats")
 public class PlayController {
     
     @Autowired

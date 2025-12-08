@@ -21,7 +21,7 @@ import com.example.demo.DTO.RentRequest;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("rent")
+@RequestMapping("streaming/rent")
 public class RentController {
     
     @Autowired

@@ -1,10 +1,8 @@
 package com.example.demo.Controller;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
-@RequestMapping("users")
+@RequestMapping("streaming/users")
 public class UserController {
     
     @Autowired

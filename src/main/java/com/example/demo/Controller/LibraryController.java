@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
-@RequestMapping("library")
+@RequestMapping("streaming/library")
 public class LibraryController {
     
     @Autowired

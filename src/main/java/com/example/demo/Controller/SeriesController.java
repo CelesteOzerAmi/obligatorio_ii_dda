@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("series")
+@RequestMapping("streaming/series")
 public class SeriesController {
     
     @Autowired

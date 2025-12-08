@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("movies")
+@RequestMapping("streaming/movies")
 public class MovieController {
     
     @Autowired
