@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.DTO.UserRequest;
 import com.example.demo.Entity.LibraryEntity;
 import com.example.demo.Entity.UserEntity;
 import com.example.demo.Repository.LibraryRepository;
@@ -67,15 +69,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> postUser(UserEntity user) {
-        if (user.getName().isEmpty() || user.getEmail().isEmpty()) {
-            return ResponseEntity.badRequest().body("sin datos suficientes");
+    public ResponseEntity<?> postUser(UserRequest userRequest) {
+        if (userRequest.name() != null || userRequest.email() != null ) {
+            UserEntity userEntity = new UserEntity();
+            userEntity.setName(userRequest.name());
+            userEntity.setEmail(userRequest.email());
+            userEntity.setSignInDate(LocalDate.now());
+            userRepository.save(userEntity);
+
+            LibraryEntity library = new LibraryEntity();
+            library.setUser(userEntity);
+            libraryRepository.save(library);
+            return new ResponseEntity<>(userEntity, HttpStatus.CREATED);
         }
-        userRepository.save(user);
-        LibraryEntity library = new LibraryEntity();
-        library.setUser(user);
-        libraryRepository.save(library);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>("Error al registrar usuario", HttpStatus.BAD_REQUEST);
     }
 
     @Override
@@ -90,25 +97,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> updateUser(UserEntity userEntity) {
+    public ResponseEntity<?> updateUser(int id, UserRequest UserRequest) {
 
-        Optional<UserEntity> userRepos = userRepository.findById(userEntity.getId());
+        if(UserRequest.name() != null && UserRequest.email() != null){
+            Optional<UserEntity> userRepos = userRepository.findById(id);
 
-        if (!userRepos.isPresent()) {
-            return new ResponseEntity<>("usuario no existe", HttpStatus.NOT_FOUND);
+            if (!userRepos.isPresent()) {
+                return new ResponseEntity<>("usuario no existe", HttpStatus.NOT_FOUND);
+            }
+    
+            UserEntity userFound = userRepos.get();
+            userFound.setName(UserRequest.name());
+            userFound.setEmail(UserRequest.email());
+    
+            return new ResponseEntity<>(userRepository.save(userFound), HttpStatus.OK);
         }
-
-        if (userEntity.getName().isEmpty() || userEntity.getEmail().isEmpty()
-                || userEntity.getSignInDate().equals(null)) {
-            return new ResponseEntity<>("faltan datos obligatorios", HttpStatus.BAD_REQUEST);
-        }
-
-        UserEntity userFound = userRepos.get();
-        userFound.setName(userEntity.getName());
-        userFound.setEmail(userEntity.getEmail());
-        userFound.setSignInDate(userEntity.getSignInDate());
-
-        return new ResponseEntity<>(userRepository.save(userFound), HttpStatus.OK);
+        return new ResponseEntity<>("Error al actualizar datos", HttpStatus.BAD_REQUEST);
     }
 
     @Override

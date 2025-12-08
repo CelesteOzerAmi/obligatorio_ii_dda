@@ -7,8 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.DTO.CategoryRequest;
 import com.example.demo.Entity.CategoryEntity;
 import com.example.demo.Service.CategoryService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,8 +38,8 @@ public class CategoryController {
     }
     
     @PostMapping("postCategory")
-    public ResponseEntity<?> postCategory(@RequestBody CategoryEntity category) {
-        return categoryService.postCategory(category);
+    public ResponseEntity<?> postCategory(@Valid @RequestBody CategoryRequest categoryRequest) {
+        return categoryService.postCategory(categoryRequest);
     }
     
 }

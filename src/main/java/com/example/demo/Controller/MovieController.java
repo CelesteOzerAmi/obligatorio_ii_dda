@@ -7,8 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.DTO.MovieRequest;
 import com.example.demo.Entity.MovieEntity;
 import com.example.demo.Service.ContentService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,12 +39,12 @@ public class MovieController {
     }
     
     @PostMapping("postMovie")
-    public ResponseEntity<?> postMovie(@RequestBody MovieEntity movie) {        
-        return contentService.postMovie(movie);
+    public ResponseEntity<?> postMovie(@Valid @RequestBody MovieRequest movieRequest) {        
+        return contentService.postMovie(movieRequest);
     }
     
-    @PutMapping("editMovie")
-    public ResponseEntity<?> editMovie(@RequestBody MovieEntity movie){
-        return contentService.editMovie(movie);
+    @PutMapping("editMovie/{id}")
+    public ResponseEntity<?> editMovie(@PathVariable int id, @Valid @RequestBody MovieRequest movieRequest){
+        return contentService.editMovie(id, movieRequest);
     }
 }

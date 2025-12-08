@@ -1,14 +1,19 @@
 package com.example.demo.Controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.DTO.UserRequest;
 import com.example.demo.Entity.UserEntity;
 import com.example.demo.Service.UserService;
+
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,13 +53,13 @@ public class UserController {
     }
 
     @PostMapping("postUser")
-    public ResponseEntity<?> postUser(@RequestBody UserEntity user) {        
+    public ResponseEntity<?> postUser(@Valid @RequestBody UserRequest user) {      
         return userService.postUser(user);
     }
     
-    @PutMapping("updateUser")
-    public ResponseEntity<?> updateUser(@RequestBody UserEntity user){
-        return userService.updateUser(user);
+    @PutMapping("updateUser/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable int id, @Valid @RequestBody UserRequest user){
+        return userService.updateUser(id, user);
     }
 
     @DeleteMapping("deleteUser/{id}")

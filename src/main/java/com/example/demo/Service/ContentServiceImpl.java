@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.DTO.MovieRequest;
+import com.example.demo.DTO.SeriesRequest;
 import com.example.demo.Entity.ContentEntity;
 import com.example.demo.Entity.MovieEntity;
 import com.example.demo.Entity.SeriesEntity;
@@ -52,40 +55,38 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public ResponseEntity<?> postMovie(MovieEntity movie){
-        if(movie.getName().isBlank() || movie.getCategory().equals(null) || 
-            movie.getDescription().isBlank() || movie.getYear().isBlank() ||
-            movie.getDuration() < 1) {
-            return new ResponseEntity<>("Faltan datos", HttpStatus.BAD_REQUEST);
-        }
-        if (movie.getPurchasePrice() < 0 || movie.getRentPrice() < 0) {
-            return new ResponseEntity<>("Costos de compra o alquiler deben ser mayores a cero.",
-                    HttpStatus.BAD_REQUEST);
-        }
-        
-
-        if(categoryService.getById(movie.getCategory().getName()) == null){
+    public ResponseEntity<?> postMovie(MovieRequest movieRequest){
+      
+        if(categoryService.getById(movieRequest.category().getName()) == null){
             return new ResponseEntity<>("Categoría no existe.", HttpStatus.BAD_REQUEST);
         }
+        MovieEntity movie = new MovieEntity();
+        movie.setName(movieRequest.name());
+        movie.setDescription(movieRequest.description());
+        movie.setCategory(movieRequest.category());
+        movie.setDuration(movieRequest.duration());
+        movie.setYear(movieRequest.year());
+        movie.setPurchasePrice(movieRequest.purchasePrice());
+        movie.setRentPrice(movieRequest.rentPrice());
+        movie.setPremiumExclusive(movieRequest.premiumExclusive());
         return new ResponseEntity<>(contentRepository.save(movie), HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<?> postSeries(SeriesEntity series){
-        if(series.getName().isBlank() || series.getCategory().equals(null) || 
-            series.getDescription().isBlank() || series.getYear().isBlank() || 
-            series.getSeasons() < 1 || series.getChapters() < 1) {
-            return new ResponseEntity<>("Faltan datos", HttpStatus.BAD_REQUEST);
-        }
-        if (series.getPurchasePrice() < 0 || series.getRentPrice() < 0) {
-            return new ResponseEntity<>("Costos de compra o alquiler deben ser mayores a cero.",
-                    HttpStatus.BAD_REQUEST);
-        }
-        
-
-        if(categoryService.getById(series.getCategory().getName()) == null){
+    public ResponseEntity<?> postSeries(SeriesRequest seriesRequest){       
+        if(categoryService.getById(seriesRequest.category().getName()) == null){
             return new ResponseEntity<>("Categoría no existe.", HttpStatus.BAD_REQUEST);
         }
+        SeriesEntity series = new SeriesEntity();
+        series.setName(seriesRequest.name());
+        series.setDescription(seriesRequest.description());
+        series.setCategory(seriesRequest.category());
+        series.setSeasons(seriesRequest.seasons());
+        series.setChapters(seriesRequest.chapters());
+        series.setYear(seriesRequest.year());
+        series.setPurchasePrice(seriesRequest.purchasePrice());
+        series.setRentPrice(seriesRequest.rentPrice());
+        series.setPremiumExclusive(seriesRequest.premiumExclusive());
         return new ResponseEntity<>(contentRepository.save(series), HttpStatus.CREATED);
     }
 
@@ -111,31 +112,31 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public ResponseEntity<?> editMovie(MovieEntity movie){
-        ContentEntity movieRepo = contentRepository.findById(movie.getId()).orElse(null);
+    public ResponseEntity<?> editMovie(int id, MovieRequest movieRequest){
+        ContentEntity movieRepo = contentRepository.findById(id).orElse(null);
         if(movieRepo != null){
-            movieRepo.setDescription(movie.getDescription());
-            movieRepo.setYear(movie.getYear());
-            movieRepo.setCategory(movie.getCategory());
-            movieRepo.setRentPrice(movie.getRentPrice());
-            movieRepo.setPurchasePrice(movie.getPurchasePrice());
-            movieRepo.setPremiumExclusive(movie.isPremiumExclusive());
-            return new ResponseEntity<>(contentRepository.save(movie), HttpStatus.OK);
+            movieRepo.setDescription(movieRequest.description());
+            movieRepo.setYear(movieRequest.year());
+            movieRepo.setCategory(movieRequest.category());
+            movieRepo.setRentPrice(movieRequest.rentPrice());
+            movieRepo.setPurchasePrice(movieRequest.purchasePrice());
+            movieRepo.setPremiumExclusive(movieRequest.premiumExclusive());
+            return new ResponseEntity<>(contentRepository.save(movieRepo), HttpStatus.OK);
         }
         return new ResponseEntity<>("No se encontró película con ese id", HttpStatus.NOT_FOUND);
     }
 
     @Override
-    public ResponseEntity<?> editSeries(SeriesEntity series){
-        ContentEntity seriesRepo = contentRepository.findById(series.getId()).orElse(null);
+    public ResponseEntity<?> editSeries(int id, SeriesRequest seriesRequest){
+        ContentEntity seriesRepo = contentRepository.findById(id).orElse(null);
         if(seriesRepo != null){
-            seriesRepo.setDescription(series.getDescription());
-            seriesRepo.setYear(series.getYear());
-            seriesRepo.setCategory(series.getCategory());
-            seriesRepo.setRentPrice(series.getRentPrice());
-            seriesRepo.setPurchasePrice(series.getPurchasePrice());
-            seriesRepo.setPremiumExclusive(series.isPremiumExclusive());
-            return new ResponseEntity<>(contentRepository.save(series), HttpStatus.OK);
+            seriesRepo.setDescription(seriesRequest.description());
+            seriesRepo.setYear(seriesRequest.year());
+            seriesRepo.setCategory(seriesRequest.category());
+            seriesRepo.setRentPrice(seriesRequest.rentPrice());
+            seriesRepo.setPurchasePrice(seriesRequest.purchasePrice());
+            seriesRepo.setPremiumExclusive(seriesRequest.premiumExclusive());
+            return new ResponseEntity<>(contentRepository.save(seriesRepo), HttpStatus.OK);
         }
         return new ResponseEntity<>("No se encontró serie con ese id", HttpStatus.NOT_FOUND);
     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.springframework.http.ResponseEntity;
 
+import com.example.demo.DTO.UserRequest;
 import com.example.demo.Entity.UserEntity;
 
 public interface UserService {
@@ -14,11 +15,11 @@ public interface UserService {
 
     public ResponseEntity<ArrayList<UserEntity>> getStandardUsers();
     
-    public ResponseEntity<?> postUser(UserEntity user);
+    public ResponseEntity<?> postUser(UserRequest userRequest);
 
     public ResponseEntity<?> getById(int id);
 
-    public ResponseEntity<?> updateUser(UserEntity user);
+    public ResponseEntity<?> updateUser(int id, UserRequest UserRequest);
 
     public ResponseEntity<?> deleteUser(int id);
 }

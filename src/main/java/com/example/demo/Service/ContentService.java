@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.springframework.http.ResponseEntity;
 
+import com.example.demo.DTO.MovieRequest;
+import com.example.demo.DTO.SeriesRequest;
 import com.example.demo.Entity.ContentEntity;
 import com.example.demo.Entity.MovieEntity;
 import com.example.demo.Entity.SeriesEntity;
@@ -16,15 +18,15 @@ public interface ContentService {
 
     public ResponseEntity<ArrayList<MovieEntity>> getAllMovies();
 
-    public ResponseEntity<?> postMovie(MovieEntity movie);
+    public ResponseEntity<?> postMovie(MovieRequest movieRequest);
 
     public ResponseEntity<ArrayList<SeriesEntity>> getAllSeries();
 
-    public ResponseEntity<?> postSeries(SeriesEntity series);
+    public ResponseEntity<?> postSeries(SeriesRequest seriesRequest);
 
     public ResponseEntity<?> deleteContent(int id);
 
-    public ResponseEntity<?> editMovie(MovieEntity movie);
+    public ResponseEntity<?> editMovie(int id, MovieRequest movieRequest);
 
-    public ResponseEntity<?> editSeries(SeriesEntity series);
+    public ResponseEntity<?> editSeries(int id, SeriesRequest seriesRequest);
 }

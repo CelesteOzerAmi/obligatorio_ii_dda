@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.DTO.CategoryRequest;
 import com.example.demo.Entity.CategoryEntity;
 import com.example.demo.Repository.CategoryRepository;
 
@@ -22,13 +23,13 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public ResponseEntity<?> postCategory(CategoryEntity category){
-        if(category.getName().isBlank()){
-            return new ResponseEntity<>("Ingrese el nombre de la categoría", HttpStatus.BAD_REQUEST);
-        }
-        if(categoryRepository.findById(category.getName()).isPresent()){
+    public ResponseEntity<?> postCategory(CategoryRequest categoryRequest){
+        
+        if(categoryRepository.findById(categoryRequest.name()).isPresent()){
             return new ResponseEntity<>("Categoría ya existe", HttpStatus.BAD_REQUEST);
         }
+        CategoryEntity category = new CategoryEntity();
+        category.setName(categoryRequest.name());
         return new ResponseEntity<>(categoryRepository.save(category), HttpStatus.OK);
     }
 

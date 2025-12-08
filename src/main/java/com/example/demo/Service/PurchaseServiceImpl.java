@@ -27,6 +27,9 @@ public class PurchaseServiceImpl implements PurchaseService{
     @Autowired
     private ContentRepository contentRepository;
 
+    @Autowired
+    private LibraryService libraryService;
+
     @Override
     public ResponseEntity<ArrayList<PurchaseEntity>> getAll(){
         return ResponseEntity.ok().body(purchaseRepository.findAll());
@@ -46,6 +49,10 @@ public class PurchaseServiceImpl implements PurchaseService{
         purchase.setUser(userRepo);
         purchase.setPurchaseDate(LocalDate.now());
         purchase.setFinalPrice(contentRepo.getPurchasePrice());
-        return new ResponseEntity<>(purchaseRepository.save(purchase), HttpStatus.ACCEPTED);
+        purchaseRepository.save(purchase);
+        if (libraryService.addContent(userId, contentId)) {
+            return new ResponseEntity<>(purchase, HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(purchase, HttpStatus.ACCEPTED);
     }
 }
