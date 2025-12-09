@@ -41,10 +41,16 @@ public class RentServiceImpl implements RentService {
     @Override
     public ResponseEntity<?> postRent(int contentId, int userId) {
         ContentEntity contentRepo = contentRepository.findById(contentId).orElse(null);
-
         UserEntity userRepo = userRepository.findById(userId).orElse(null);
         if (contentRepo == null || userRepo == null) {
             return new ResponseEntity<>("No fue posible concretar la operación.", HttpStatus.BAD_REQUEST);
+        }
+
+        RentEntity rentRepo = getByUserIdAndContentId(userId, contentId);
+        if(rentRepo != null){
+            rentRepo.setExpirationDate(LocalDate.now().plusDays(30));
+            rentRepository.save(rentRepo);
+            return new ResponseEntity<>(rentRepo, HttpStatus.OK);
         }
 
         RentEntity rent = new RentEntity();
@@ -60,5 +66,9 @@ public class RentServiceImpl implements RentService {
         return new ResponseEntity<>("Hubo un error al agregar contenido", HttpStatus.BAD_REQUEST);
     }
 
+    @Override
+    public RentEntity getByUserIdAndContentId(int userId, int contentId){
+        return rentRepository.findByUserIdAndContentId(userId, contentId);
+    }
     
 }

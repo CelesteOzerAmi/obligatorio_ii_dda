@@ -10,4 +10,5 @@ public interface RentRepository extends JpaRepository<RentEntity, Integer> {
     
     public ArrayList<RentEntity> findAll();
 
+    public RentEntity findByUserIdAndContentId(int userId, int contentId);
 }
