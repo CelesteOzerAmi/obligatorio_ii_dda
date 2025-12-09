@@ -59,4 +59,6 @@ public class RentServiceImpl implements RentService {
         }
         return new ResponseEntity<>("Hubo un error al agregar contenido", HttpStatus.BAD_REQUEST);
     }
+
+    
 }

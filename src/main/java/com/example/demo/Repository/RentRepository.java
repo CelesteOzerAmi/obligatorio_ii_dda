@@ -9,4 +9,5 @@ import com.example.demo.Entity.RentEntity;
 public interface RentRepository extends JpaRepository<RentEntity, Integer> {
     
     public ArrayList<RentEntity> findAll();
+
 }

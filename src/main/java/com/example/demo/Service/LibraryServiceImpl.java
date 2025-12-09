@@ -1,7 +1,9 @@
 package com.example.demo.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,10 +13,12 @@ import org.springframework.stereotype.Service;
 import com.example.demo.Entity.ContentEntity;
 import com.example.demo.Entity.LibraryEntity;
 import com.example.demo.Entity.MovieEntity;
+import com.example.demo.Entity.RentEntity;
 import com.example.demo.Entity.SeriesEntity;
 import com.example.demo.Entity.UserEntity;
 import com.example.demo.Repository.ContentRepository;
 import com.example.demo.Repository.LibraryRepository;
+import com.example.demo.Repository.RentRepository;
 import com.example.demo.Repository.UserRepository;
 
 @Service
@@ -28,6 +32,9 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    RentRepository rentRepository;
 
     @Override
     public ResponseEntity<?> getLibrary(int userId) {
@@ -106,5 +113,64 @@ public class LibraryServiceImpl implements LibraryService {
             }
         }
         return new ResponseEntity<>("Contenido no encontrado", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> returnContent(int userId) {
+        LibraryEntity libraryRepo = libraryRepository.findByUserId(userId);
+        Map<String, Object> rentMap = new HashMap<>();
+        List<RentEntity> rents = rentRepository.findAll()
+                .stream()
+                .filter(r -> r.getUser().getId() == userId)
+                .toList();
+
+        if (rents.size() > 0) {
+            List<SeriesEntity> seriesList = libraryRepo.getSeries();
+            List<MovieEntity> moviesList = libraryRepo.getMovies();
+
+            if (seriesList.size() > 0) {
+                for (SeriesEntity series : seriesList) {
+                    for (RentEntity rentEntity : rents) {
+                        if (rentEntity.getContent().getId() == series.getId()) {
+                            rentMap.put(series.getName(), rentEntity);
+                        }
+                    }
+                }
+            }
+            if (moviesList.size() > 0) {
+                for (MovieEntity movie : moviesList) {
+                    for (RentEntity rentEntity : rents) {
+                        if (rentEntity.getContent().getId() == movie.getId()) {
+                            rentMap.put(movie.getName(), rentEntity);
+                        }
+                    }
+                }
+            }
+        }
+        return new ResponseEntity<>(rentMap, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> removeContent(int userId, int contentId) {
+        LibraryEntity libraryRepo = libraryRepository.findByUserId(userId);
+        ContentEntity content = libraryRepo.getMovies().stream()
+                .filter(m -> m.getId() == contentId)
+                .findFirst()
+                .orElse(null);
+        if (content != null) {
+            libraryRepo.getMovies().remove(content);
+            return new ResponseEntity<>(libraryRepository.save(libraryRepo), HttpStatus.OK);
+        }
+
+        content = libraryRepo.getSeries().stream()
+                .filter(s -> s.getId() == contentId)
+                .findFirst()
+                .orElse(null);
+        if (content != null) {
+            libraryRepo.getSeries().remove(content);
+            return new ResponseEntity<>(libraryRepository.save(libraryRepo), HttpStatus.OK);
+        }
+        
+        return new ResponseEntity<>("No se encontró contenido", HttpStatus.NOT_FOUND);
     }
 }

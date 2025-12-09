@@ -14,4 +14,6 @@ public interface RentService {
 
     @Transactional
     public ResponseEntity<?> postRent(int contentId, int userId);
+
+
 }

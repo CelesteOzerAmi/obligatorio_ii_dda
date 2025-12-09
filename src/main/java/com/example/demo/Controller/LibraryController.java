@@ -6,8 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Service.LibraryService;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
 @RequestMapping("streaming/library")
@@ -26,4 +29,13 @@ public class LibraryController {
         return libraryService.getContentOnLibrary(userId, contentId);
     }
 
+    @GetMapping("getLibrary/getReturnDates/{userId}")
+    public ResponseEntity<?> getReturnDates(@PathVariable int userId) {
+        return libraryService.returnContent(userId);
+    }
+    
+    @DeleteMapping("getLibrary/{userId}/removeContent/{contentId}")
+    public ResponseEntity<?> removeContent(@PathVariable int userId,@PathVariable int contentId){
+        return libraryService.removeContent(userId, contentId);
+    }
 }

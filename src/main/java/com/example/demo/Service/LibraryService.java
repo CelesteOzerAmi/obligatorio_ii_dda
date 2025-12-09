@@ -9,4 +9,8 @@ public interface LibraryService {
     public boolean addContent(int userId, int contentId);
 
     public ResponseEntity<?> getContentOnLibrary(int userId, int contentId);
+
+    public ResponseEntity<?> returnContent(int userId);
+
+    public ResponseEntity<?> removeContent(int userId, int contentId);
 }
