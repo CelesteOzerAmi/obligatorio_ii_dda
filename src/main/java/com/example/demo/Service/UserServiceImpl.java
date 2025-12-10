@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.DTO.UserRequest;
 import com.example.demo.Entity.LibraryEntity;
+import com.example.demo.Entity.SubscriptionEntity;
 import com.example.demo.Entity.UserEntity;
 import com.example.demo.Repository.LibraryRepository;
 import com.example.demo.Repository.SubscriptionRepository;
@@ -70,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> postUser(UserRequest userRequest) {
-        if (userRequest.name() != null || userRequest.email() != null ) {
+        if (userRequest.name() != null || userRequest.email() != null) {
             UserEntity userEntity = new UserEntity();
             userEntity.setName(userRequest.name());
             userEntity.setEmail(userRequest.email());
@@ -99,17 +101,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> updateUser(int id, UserRequest UserRequest) {
 
-        if(UserRequest.name() != null && UserRequest.email() != null){
+        if (UserRequest.name() != null && UserRequest.email() != null) {
             Optional<UserEntity> userRepos = userRepository.findById(id);
 
             if (!userRepos.isPresent()) {
                 return new ResponseEntity<>("usuario no existe", HttpStatus.NOT_FOUND);
             }
-    
+
             UserEntity userFound = userRepos.get();
             userFound.setName(UserRequest.name());
             userFound.setEmail(UserRequest.email());
-    
+
             return new ResponseEntity<>(userRepository.save(userFound), HttpStatus.OK);
         }
         return new ResponseEntity<>("Error al actualizar datos", HttpStatus.BAD_REQUEST);
@@ -121,6 +123,13 @@ public class UserServiceImpl implements UserService {
 
         if (!userRepos.isPresent()) {
             return new ResponseEntity<>("usuario no existe", HttpStatus.NOT_FOUND);
+        }
+
+        List<SubscriptionEntity> subscriptions = subscriptionRepository.findAll();
+        for (SubscriptionEntity subs : subscriptions) {
+            if (subs.getUser().getId() == id) {
+                subscriptionRepository.delete(subs);
+            }
         }
         userRepository.delete(userRepos.get());
         return new ResponseEntity<>("Usuario eliminado", HttpStatus.OK);
