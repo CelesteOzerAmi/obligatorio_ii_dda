@@ -11,17 +11,19 @@ import org.springframework.stereotype.Service;
 import com.example.demo.Entity.ContentEntity;
 import com.example.demo.Entity.PurchaseEntity;
 import com.example.demo.Entity.RentEntity;
+import com.example.demo.Entity.SubscriptionEntity;
 import com.example.demo.Entity.UserEntity;
 import com.example.demo.Repository.ContentRepository;
 import com.example.demo.Repository.PurchaseRepository;
 import com.example.demo.Repository.RentRepository;
+import com.example.demo.Repository.SubscriptionRepository;
 import com.example.demo.Repository.UserRepository;
 
 @Service
 public class PurchaseServiceImpl implements PurchaseService {
 
     @Autowired
-    public PurchaseRepository purchaseRepository;
+    private PurchaseRepository purchaseRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -33,7 +35,10 @@ public class PurchaseServiceImpl implements PurchaseService {
     private LibraryService libraryService;
 
     @Autowired
-    RentRepository rentRepository;
+    private RentRepository rentRepository;
+
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
     @Override
     public ResponseEntity<ArrayList<PurchaseEntity>> getAll() {
@@ -53,7 +58,18 @@ public class PurchaseServiceImpl implements PurchaseService {
         purchase.setContent(contentRepo);
         purchase.setUser(userRepo);
         purchase.setPurchaseDate(LocalDate.now());
-        purchase.setFinalPrice(contentRepo.getPurchasePrice());
+
+        SubscriptionEntity subscriptionEntity = subscriptionRepository.findAll()
+                .stream()
+                .filter(s -> s.getUser().getId() == userRepo.getId() && s.isActive())
+                .findFirst()
+                .orElse(null);
+
+        if (subscriptionEntity != null) {
+            purchase.setFinalPrice(contentRepo.getPurchasePrice() * subscriptionEntity.getPremiumDiscount());
+        } else {
+            purchase.setFinalPrice(contentRepo.getPurchasePrice());
+        }
         purchaseRepository.save(purchase);
 
         RentEntity rentRepo = rentRepository.findByUserIdAndContentId(userId, contentId);

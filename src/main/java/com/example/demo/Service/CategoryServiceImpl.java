@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService{
         }
         CategoryEntity category = new CategoryEntity();
         category.setName(categoryRequest.name());
-        return new ResponseEntity<>(categoryRepository.save(category), HttpStatus.OK);
+        return new ResponseEntity<>(categoryRepository.save(category), HttpStatus.CREATED);
     }
 
     @Override
@@ -44,4 +44,15 @@ public class CategoryServiceImpl implements CategoryService{
         }        
     }
     
+    @Override
+    public ResponseEntity<?> deleteCategory(String name){
+        CategoryEntity categoryRepos = categoryRepository.findById(name).orElse(null);
+
+        if(categoryRepos == null){
+            return new ResponseEntity<>("Categoría no existe", HttpStatus.NOT_FOUND);
+        } else {
+            categoryRepository.delete(categoryRepos);
+            return new ResponseEntity<>("Categoría eliminada", HttpStatus.OK);
+        }  
+    }
 }

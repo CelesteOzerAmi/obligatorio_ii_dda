@@ -14,5 +14,7 @@ public interface CategoryService {
     public ResponseEntity<?> postCategory(CategoryRequest categoryRequest);
 
     public ResponseEntity<?> getById(String name);
+
+    public ResponseEntity<?> deleteCategory(String name);
     
 }  

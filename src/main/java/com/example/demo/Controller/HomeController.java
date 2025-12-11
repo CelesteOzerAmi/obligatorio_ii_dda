@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 public class HomeController {
     
-    @GetMapping("/")
+    @GetMapping("/streaming/")
     public String home() {
         return "api anda";
     }
